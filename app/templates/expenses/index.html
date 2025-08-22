@@ -1,0 +1,75 @@
+
+{% extends "base.html" %}
+{% block title %}Gastos - Lista{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h4">Gastos</h1>
+  <div>
+    <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('expenses.categories') }}">Categorías</a>
+    <a class="btn btn-primary btn-sm" href="{{ url_for('expenses.create') }}">Nuevo gasto</a>
+  </div>
+</div>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <form class="row g-2 align-items-end">
+      <div class="col-auto">
+        <label class="form-label">Mes</label>
+        <input type="number" name="month" min="1" max="12" class="form-control" value="{{ month or '' }}">
+      </div>
+      <div class="col-auto">
+        <label class="form-label">Año</label>
+        <input type="number" name="year" min="2000" max="2100" class="form-control" value="{{ year or '' }}">
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-outline-primary">Filtrar</button>
+      </div>
+      <div class="col-auto ms-auto">
+        <span class="badge text-bg-secondary">Total: $ {{ '%.2f'|format(total or 0) }}</span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Monto</th>
+          <th>Categoría</th>
+          <th>Método</th>
+          <th>Fijo</th>
+          <th>Descripción</th>
+          <th style="width: 80px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in expenses %}
+        <tr>
+          <td>{{ e.occurred_on.strftime("%Y-%m-%d") }}</td>
+          <td>$ {{ '%.2f'|format(e.amount) }}</td>
+          <td>{{ e.category.name if e.category else '—' }}</td>
+          <td>{{ e.payment_method or '—' }}</td>
+          <td>{{ 'Sí' if e.is_fixed else 'No' }}</td>
+          <td class="text-truncate" style="max-width: 320px">{{ e.description or '' }}</td>
+         <td>
+  <div class="d-flex gap-1">
+    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('expenses.edit', expense_id=e.id) }}">Editar</a>
+    <form method="POST" action="{{ url_for('expenses.delete', expense_id=e.id) }}" onsubmit="return confirm('¿Eliminar gasto?')">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+    </form>
+  </div>
+</td>
+
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-secondary py-4">No hay gastos cargados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

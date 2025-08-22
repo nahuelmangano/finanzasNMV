@@ -1,0 +1,27 @@
+
+{% extends "base.html" %}
+{% block title %}Registro - Gastos{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 mb-3">Crear cuenta</h1>
+        <form method="POST">
+          {{ form.hidden_tag() }}
+          <div class="mb-3">
+            {{ form.email.label(class="form-label") }}
+            {{ form.email(class="form-control", placeholder="email@ejemplo.com") }}
+          </div>
+          <div class="mb-3">
+            {{ form.password.label(class="form-label") }}
+            {{ form.password(class="form-control", placeholder="Mínimo 6 caracteres") }}
+          </div>
+          {{ form.submit(class="btn btn-primary w-100") }}
+        </form>
+        <p class="mt-3 mb-0 small">¿Ya tenés cuenta? <a href="{{ url_for('auth.login') }}">Ingresar</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+
+{% extends "base.html" %}
+{% block title %}Servicios del hogar{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h4">Servicios</h1>
+  <a class="btn btn-primary btn-sm" href="{{ url_for('services.create') }}">Nuevo servicio</a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0 align-middle">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Proveedor</th>
+          <th>Vence (día)</th>
+          <th>Monto estimado</th>
+          <th>Notas</th>
+          <th style="width: 80px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in services %}
+        <tr>
+          <td>{{ s.name }}</td>
+          <td>{{ s.provider or '—' }}</td>
+          <td>{{ s.due_day or '—' }}</td>
+          <td>{{ ('$ ' ~ ('%.2f'|format(s.expected_amount))) if s.expected_amount else '—' }}</td>
+          <td class="text-truncate" style="max-width: 300px">{{ s.notes or '' }}</td>
+          <td>
+        
+            <form method="POST" action="{{ url_for('services.delete', service_id=s.id) }}" onsubmit="return confirm('¿Eliminar servicio?')">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+</form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center text-secondary py-4">No hay servicios cargados.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

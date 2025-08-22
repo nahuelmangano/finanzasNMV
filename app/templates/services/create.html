@@ -1,0 +1,43 @@
+
+{% extends "base.html" %}
+{% block title %}Nuevo servicio{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h5 mb-3">Nuevo servicio</h1>
+        <form method="POST">
+          {{ form.hidden_tag() }}
+          <div class="row g-3">
+            <div class="col-md-6">
+              {{ form.name.label(class="form-label") }}
+              {{ form.name(class="form-control", placeholder="Luz / Agua / Internet / Alquiler") }}
+            </div>
+            <div class="col-md-6">
+              {{ form.provider.label(class="form-label") }}
+              {{ form.provider(class="form-control", placeholder="Ej: Edenor, AySA") }}
+            </div>
+            <div class="col-md-6">
+              {{ form.due_day.label(class="form-label") }}
+              {{ form.due_day(class="form-control", placeholder="1..31") }}
+            </div>
+            <div class="col-md-6">
+              {{ form.expected_amount.label(class="form-label") }}
+              {{ form.expected_amount(class="form-control", step="0.01") }}
+            </div>
+            <div class="col-12">
+              {{ form.notes.label(class="form-label") }}
+              {{ form.notes(class="form-control", rows="3") }}
+            </div>
+          </div>
+          <div class="d-flex gap-2 mt-3">
+            <a class="btn btn-outline-secondary" href="{{ url_for('services.index') }}">Cancelar</a>
+            {{ form.submit(class="btn btn-primary ms-auto") }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
